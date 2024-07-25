@@ -8,6 +8,8 @@ import {Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MyHeader from '../component/Header';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import ScanImei from '../Screens/ScanImei';
+import BleScreen from '../Screens/BleScreen';
 const HomeScreen = ({route, navigation}) => {
   useEffect(() => {
     console.log('hrrme');
@@ -84,13 +86,13 @@ const DetailsLeague = ({route, navigation}) => {
   );
 };
 
-const LeaguesRoute = () => {
+const HomeScreens = () => {
   const Stack = createNativeStackNavigator();
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="AllLeagues" component={MainLeague} />
-      <Stack.Screen name="DetailsLeagues" component={DetailsLeague} />
+      <Stack.Screen name="Scan Imei" component={ScanImei} />
+      <Stack.Screen name="Bluetooth" component={BleScreen} />
     </Stack.Navigator>
   );
 };
@@ -101,7 +103,7 @@ const TabArr = [
     label: 'Home',
     type: Icons.MaterialIcons,
     icon: 'live-tv',
-    component: HomeScreen,
+    component: HomeScreens,
     tabBarColor: Colors.tab1,
   },
   {
@@ -109,7 +111,7 @@ const TabArr = [
     label: 'Settings',
     type: Icons.MaterialIcons,
     icon: 'sports-soccer',
-    component: SettingsScreen,
+    component: HomeScreen,
     tabBarColor: Colors.tab2,
   },
   {
@@ -117,7 +119,7 @@ const TabArr = [
     label: 'Network',
     type: Icons.MaterialIcons,
     icon: 'sports-soccer',
-    component: LeaguesRoute,
+    component: HomeScreen,
     tabBarColor: '#ffff',
   },
   {
