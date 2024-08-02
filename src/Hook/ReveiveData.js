@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 // bluetoothUtils.js
 import {BleManager} from 'react-native-ble-plx';
 import {encode} from 'base-64';
@@ -12,10 +11,6 @@ let monitor;
 
 export const ReceiveData = async (ConnectedDevice, setTram) => {
   const [data, setData] = useState(null);
-
-  useEffect(() => {
-    setTram(data);
-  }, [data]);
 
   // const {Tram, setTram} = useContext(ConfContext);
   try {
