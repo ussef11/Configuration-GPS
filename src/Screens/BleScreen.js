@@ -27,8 +27,8 @@ const BleScreen = ({route, navigation}) => {
 
   const [devices, setDevices] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
-  const [ConnectedDevice, setConnectedDevice] = useState(null);
   const {QrcodeData, setQrcodeData} = useContext(ConfContext);
+  const {ConnectedDevice, setConnectedDevice} = useContext(ConfContext);
 
   useEffect(() => {
     console.log(' QrcodeDataQrcodeData', QrcodeData);
@@ -199,6 +199,10 @@ const BleScreen = ({route, navigation}) => {
 
             characteristic.writeWithResponse(message);
             setDone(true);
+
+            setTimeout(() => {
+              navigation.navigate('Network');
+            }, 2000);
             return;
           }
         }

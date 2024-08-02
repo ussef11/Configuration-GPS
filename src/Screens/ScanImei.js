@@ -27,7 +27,7 @@ const ScanImei = ({route, navigation}) => {
       console.log(QrcodeData);
       navigation.navigate('Bluetooth');
       // setTimeout(() => {
-       
+
       // }, 2000);
     }
   }, [QrcodeData]);

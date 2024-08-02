@@ -6,8 +6,19 @@ import {ConfContext} from './src/Helper/ConfContext';
 
 const App = () => {
   const [QrcodeData, setQrcodeData] = useState(false);
+  const [ConnectedDevice, setConnectedDevice] = useState();
+  const [Tram, setTram] = useState();
+
   return (
-    <ConfContext.Provider value={{QrcodeData, setQrcodeData}}>
+    <ConfContext.Provider
+      value={{
+        QrcodeData,
+        setQrcodeData,
+        ConnectedDevice,
+        setConnectedDevice,
+        Tram,
+        setTram,
+      }}>
       <MainNavigation />
     </ConfContext.Provider>
   );

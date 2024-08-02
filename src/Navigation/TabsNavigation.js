@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import React, {useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -10,6 +11,9 @@ import MyHeader from '../component/Header';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ScanImei from '../Screens/ScanImei';
 import BleScreen from '../Screens/BleScreen';
+import ChooseConf from '../Screens/ChooseConf';
+import WifiConf from '../Screens/WifiConf';
+import TestTrams from '../Screens/TestTrams';
 const HomeScreen = ({route, navigation}) => {
   useEffect(() => {
     console.log('hrrme');
@@ -93,6 +97,9 @@ const HomeScreens = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Scan Imei" component={ScanImei} />
       <Stack.Screen name="Bluetooth" component={BleScreen} />
+      <Stack.Screen name="Network" component={ChooseConf} />
+      <Stack.Screen name="Wifi configuration" component={WifiConf} />
+      <Stack.Screen name="Verify Comming Data" component={TestTrams} />
     </Stack.Navigator>
   );
 };
