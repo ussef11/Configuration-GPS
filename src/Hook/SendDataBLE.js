@@ -57,3 +57,31 @@ export const sendData = async (ssid, password, _ConnectedDevice) => {
     console.error('Error in sendData:', error);
   }
 };
+
+export const sendStopMonitoring = async (value, _ConnectedDevice) => {
+  try {
+    const message = JSON.stringify({value});
+
+    await bleManager.stopDeviceScan();
+    await disconnectFromAllDevices();
+    const connectedDevice = await _ConnectedDevice.connect();
+    console.log('Connected to device:', connectedDevice.name);
+    await connectedDevice.discoverAllServicesAndCharacteristics();
+    const services = await connectedDevice.services();
+    for (const service of services) {
+      const characteristics = await connectedDevice.characteristicsForService(
+        service.uuid,
+      );
+      for (const characteristic of characteristics) {
+        let charuuid = characteristic.uuid;
+        if (charuuid === '7219a2ff-db61-4cb6-8ef8-0d6110c86f1b') {
+          // let message = encode(_message);
+          await characteristic.writeWithResponse(encode(message));
+          return;
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error in sendData:', error);
+  }
+};

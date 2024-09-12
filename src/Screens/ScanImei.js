@@ -72,7 +72,18 @@ const ScanImei = ({route, navigation}) => {
       )}
       {Qrscanner && (
         <QRCodeScanner
-          onRead={e => setQrcodeData(e.data)}
+          onRead={e => {
+            const qrData = e.data;
+            const imeiMatch = qrData.match(/IMEI:(\d+)/);
+
+            if (imeiMatch && imeiMatch[1]) {
+              const imei = imeiMatch[1];
+              setQrcodeData(imei);
+            } else {
+              console.error('IMEI not found in QR code data');
+            }
+          }}
+
           //flashMode={RNCamera.Constants.FlashMode.torch}
           // topContent={
           //   <Text style={styles.centerText}>

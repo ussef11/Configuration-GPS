@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/self-closing-comp */
@@ -18,6 +20,8 @@ import {ReceiveData, stopMonitoring} from '../Hook/ReveiveData';
 import {BleManager} from 'react-native-ble-plx';
 import {encode} from 'base-64';
 import {atob} from 'react-native-quick-base64';
+import {sendData, sendStopMonitoring} from '../Hook/SendDataBLE';
+
 const TestTrams = ({route, navigation}) => {
   const bleManager = new BleManager();
 
@@ -78,15 +82,16 @@ const TestTrams = ({route, navigation}) => {
   const Stop = async () => {
     console.log('ReceiveData');
     try {
-      stopMonitoring();
+      //await stopMonitoring();
     } catch (error) {
       console.error('Error in testReceive:', error);
     }
+    navigation.navigate('Choose Servies');
   };
 
   useEffect(() => {
-    console.log('Tram', Tram);
-  }, [Tram]);
+    ReceiveData();
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -95,21 +100,65 @@ const TestTrams = ({route, navigation}) => {
         onPressToggleDrawer={() => navigation.toggleDrawer()}
       />
       <View>
-        <Text>TestTrams </Text>
-        <TouchableOpacity onPress={ReceiveData}>
-          <Text style={{color: 'black'}}>Receive Data</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={Stop}>
-          <Text style={{color: 'black'}}>Stop RecieveData</Text>
-        </TouchableOpacity>
+        {/* <View
+          style={{
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            onPress={ReceiveData}
+            style={{
+              borderRadius: 7,
+              width: 90,
+              height: 30,
+              backgroundColor: '#83ff00',
+
+              alignItems: 'center',
+            }}>
+            <Text style={{color: 'black'}}>Receive Data</Text>
+          </TouchableOpacity>
+        </View> */}
       </View>
-      {data && (
-        <View style={{backgroundColor: 'white', padding: 10}}>
+      {data ? (
+        <View
+          style={{
+            backgroundColor: 'white',
+            padding: 10,
+            marginBottom: 9,
+            marginTop: 9,
+            alignItems: 'center',
+          }}>
           {Object.keys(data).map(key => (
             <Text key={key} style={{color: 'black'}}>
               {`${key}: ${data[key]}`}
             </Text>
           ))}
+        </View>
+      ) : (
+        <View>
+          <Text style={{color: 'black'}}>No Data There is A probleme</Text>
+        </View>
+      )}
+      {data && (
+        <View
+          style={{
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            style={{
+              borderRadius: 7,
+              width: 110,
+              height: 30,
+              backgroundColor: '#83ff00',
+              alignItems: 'center',
+            }}
+            onPress={() => {
+              sendStopMonitoring(false, ConnectedDevice);
+              navigation.navigate('Choose Servies');
+            }}>
+            <Text style={{color: 'white', position: 'relative', top: 5}}>
+              Next
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </SafeAreaView>

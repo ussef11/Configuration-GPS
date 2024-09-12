@@ -14,6 +14,7 @@ import BleScreen from '../Screens/BleScreen';
 import ChooseConf from '../Screens/ChooseConf';
 import WifiConf from '../Screens/WifiConf';
 import TestTrams from '../Screens/TestTrams';
+import Services from '../Screens/Serivices/Services';
 const HomeScreen = ({route, navigation}) => {
   useEffect(() => {
     console.log('hrrme');
@@ -100,6 +101,7 @@ const HomeScreens = () => {
       <Stack.Screen name="Network" component={ChooseConf} />
       <Stack.Screen name="Wifi configuration" component={WifiConf} />
       <Stack.Screen name="Verify Comming Data" component={TestTrams} />
+      <Stack.Screen name="Choose Servies" component={Services} />
     </Stack.Navigator>
   );
 };
