@@ -26,6 +26,7 @@ const TestTrams = ({route, navigation}) => {
   const bleManager = new BleManager();
 
   const {ConnectedDevice, setConnectedDevice} = useContext(ConfContext);
+  const {ReciveData, setReciveData} = useContext(ConfContext);
   const {Tram, setTram} = useContext(ConfContext);
   const [data, setData] = useState(null);
   let monitor;
@@ -60,9 +61,11 @@ const TestTrams = ({route, navigation}) => {
             try {
               const decodedData = atob(update.value);
               if (decodedData != 'Connected' && decodedData != 'Failed') {
-                console.log(decodedData);
+                console.log('-----', decodedData);
+                setReciveData(decodedData);
+                console.log('-----');
                 const newData = JSON.parse(decodedData);
-
+               
                 setData(prevData => ({
                   ...prevData,
                   ...newData,
@@ -151,9 +154,9 @@ const TestTrams = ({route, navigation}) => {
               backgroundColor: '#83ff00',
               alignItems: 'center',
             }}
-            onPress={() => {
-              sendStopMonitoring(false, ConnectedDevice);
-              navigation.navigate('Choose Servies');
+            onPress={async () => {
+              await sendStopMonitoring(false, ConnectedDevice);
+              navigation.navigate('Choose Services');
             }}>
             <Text style={{color: 'white', position: 'relative', top: 5}}>
               Next

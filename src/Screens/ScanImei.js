@@ -1,3 +1,4 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useContext, useEffect, useState} from 'react';
@@ -36,6 +37,7 @@ const ScanImei = ({route, navigation}) => {
       <MyHeader
         title={route.name}
         onPressToggleDrawer={() => navigation.toggleDrawer()}
+        textStyle={{fontWeight: '100', fontSize: 20}}
       />
 
       {Done && (
@@ -56,18 +58,77 @@ const ScanImei = ({route, navigation}) => {
         </View>
       )}
       {ButtonScan && (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{flex: 1, alignItems: 'center', marginTop: 50}}>
           {QrcodeData && <Text style={{color: 'green'}}>{QrcodeData}</Text>}
-          <TouchableOpacity
-            onPress={() => {
-              setQrscanner(true);
-              setButtonScan(false);
-            }}
-            style={styles.buttonTouchable}>
-            <Icon name="camera" type={Icons.Entypo} color="green" />
+          <Text
+            style={{
+              color: '#393939',
+              fontSize: 20,
+              fontWeight: '500',
+              marginBottom: 20,
+            }}>
+            No Devices Connected yet.
+          </Text>
+          <Text
+            style={{
+              color: '#393939',
+              fontSize: 15,
+              fontWeight: '300',
+              textAlign: 'center',
+            }}>
+            Please select supported connection type:Bluetooth
+          </Text>
 
-            <Text style={styles.textscan}>Start Scan</Text>
-          </TouchableOpacity>
+          <View
+            style={{
+              marginTop: 50,
+              alignContent: 'center',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'white',
+              width: '85%',
+              height: 170,
+              borderRadius: 7,
+            }}>
+            <Image
+              style={{width: 190, height: 70}}
+              source={require('../media/iconConnect.png')}
+            />
+
+            <View
+              style={{
+                borderTopWidth: 0.1,
+                borderTopColor: '#b7b7b7',
+                height: 1,
+                backgroundColor: '#b7b7b7',
+                width: '100%',
+                marginTop: 30,
+              }}
+            />
+
+            <TouchableOpacity
+              onPress={() => {
+                setQrscanner(true);
+                setButtonScan(false);
+              }}
+              style={{
+                alignContent: 'flex-end',
+                justifyContent: 'flex-end',
+              }}>
+              <Text
+                style={[
+                  {
+                    color: '#393939',
+                    padding: 1,
+                    position: 'relative',
+                    top: 10,
+                    fontSize: 15,
+                  },
+                ]}>
+                Connect Device
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
       {Qrscanner && (

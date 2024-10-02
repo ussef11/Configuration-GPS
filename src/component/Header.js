@@ -37,7 +37,8 @@ const AppHeader = ({
           onPress={() => {
             navigation.toggleDrawer();
           }}>
-          <Feather name="menu" size={IconSize} color={iconColor} />
+                <Icon name="setting" type={Icons.AntDesign} size={IconSize} color={iconColor}  />
+   
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={onPressBack}>
@@ -67,17 +68,18 @@ const AppHeader = ({
       </View>
     );
   const TitleView = () => (
-    <View style={styles.titleView}>
-      <Title style={[{color: iconColor, textAlign: titleAlight}, textStyle]}>
+    <View style={[styles.titleView, {alignItems: 'center'}]}>
+      <Text style={[{color: iconColor, textAlign: titleAlight}, textStyle]}>
         {title}
-      </Title>
+      </Text>
     </View>
   );
   return (
     <Surface style={[styles.header, style, {backgroundColor: headerBg}]}>
-      <LeftView />
-      <TitleView />
       <RightView />
+      <TitleView />
+
+      <LeftView />
     </Surface>
   );
 };

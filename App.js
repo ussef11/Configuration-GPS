@@ -8,6 +8,8 @@ const App = () => {
   const [QrcodeData, setQrcodeData] = useState(false);
   const [ConnectedDevice, setConnectedDevice] = useState();
   const [Tram, setTram] = useState();
+  const [addBlur, setAddblur] = useState(false);
+  const [ReciveData, setReciveData] = useState();
 
   return (
     <ConfContext.Provider
@@ -18,6 +20,10 @@ const App = () => {
         setConnectedDevice,
         Tram,
         setTram,
+        addBlur,
+        setAddblur,
+        ReciveData,
+        setReciveData,
       }}>
       <MainNavigation />
     </ConfContext.Provider>

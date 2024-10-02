@@ -14,7 +14,8 @@ import BleScreen from '../Screens/BleScreen';
 import ChooseConf from '../Screens/ChooseConf';
 import WifiConf from '../Screens/WifiConf';
 import TestTrams from '../Screens/TestTrams';
-import Services from '../Screens/Serivices/Services';
+import Services from '../Screens/Services/Services';
+import Aws from '../Screens/Services/Aws';
 const HomeScreen = ({route, navigation}) => {
   useEffect(() => {
     console.log('hrrme');
@@ -101,7 +102,8 @@ const HomeScreens = () => {
       <Stack.Screen name="Network" component={ChooseConf} />
       <Stack.Screen name="Wifi configuration" component={WifiConf} />
       <Stack.Screen name="Verify Comming Data" component={TestTrams} />
-      <Stack.Screen name="Choose Servies" component={Services} />
+      <Stack.Screen name="Choose Services" component={Services} />
+      <Stack.Screen name="AWS IOT" component={Aws} />
     </Stack.Navigator>
   );
 };
@@ -110,34 +112,34 @@ const TabArr = [
   {
     route: 'Home',
     label: 'Home',
-    type: Icons.MaterialIcons,
-    icon: 'live-tv',
+    type: Icons.FontAwesome,
+    icon: 'bluetooth',
     component: HomeScreens,
-    tabBarColor: Colors.tab1,
+    tabBarColor: '#0000',
   },
   {
     route: 'Settings',
     label: 'Settings',
-    type: Icons.MaterialIcons,
-    icon: 'sports-soccer',
+    type: Icons.FontAwesome,
+    icon: 'wifi',
     component: HomeScreen,
-    tabBarColor: Colors.tab2,
+    tabBarColor: '#0000',
   },
   {
     route: 'Network',
     label: 'Network',
-    type: Icons.MaterialIcons,
-    icon: 'sports-soccer',
+    type: Icons.FontAwesome,
+    icon: 'wifi',
     component: HomeScreen,
-    tabBarColor: '#ffff',
+    tabBarColor: '#0000',
   },
   {
     route: 'Profile',
     label: 'Settings',
-    type: Icons.MaterialIcons,
-    icon: 'sports-soccer',
+    type: Icons.FontAwesome,
+    icon: 'wifi',
     component: SettingsScreen,
-    tabBarColor: '#ffff',
+    tabBarColor: '#0000',
   },
 ];
 
@@ -149,18 +151,23 @@ const TabsNavigation = () => {
       screenOptions={({route}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'black',
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
+          zIndex: 0,
+          backgroundColor: '#ffff',
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          borderBottomLeftRadius: 25,
+          borderBottomRightRadius: 25,
           overflow: 'hidden',
           position: 'absolute',
           left: 0,
           right: 0,
-          bottom: 0,
+          bottom: 3,
           height: 60,
+          paddingBottom: 5,
+          margin: 5,
         },
-        tabBarActiveTintColor: '#ffff',
-        tabBarInactiveTintColor: '#cfcfcf',
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'gray',
         tabBarIcon: ({color, size}) => {
           const {icon, type} = TabArr.find(item => item.route === route.name);
           return <Icon name={icon} type={type} size={size} color={color} />;
