@@ -12,7 +12,7 @@ import Icon, {Icons} from '../../icons/icons';
 const Services = ({route, navigation}) => {
   const [buttonText, setButtonText] = useState('Click Me!');
 
-  const handleNavigate = navigate => {
+  const handleNavigate = (navigate, params) => {
     navigation.navigate(navigate);
     // setButtonText('Hello, World!');
     // setTimeout(() => setButtonText('Click Me!'), 1400);
@@ -28,6 +28,7 @@ const Services = ({route, navigation}) => {
         activeOpacity={0.7}
         onPress={() => {
           handleNavigate('AWS IOT');
+          //handleNavigate('Configuration GPS', {path: 'AWS IOT'});
         }}>
         <View
           style={{
@@ -63,6 +64,7 @@ const Services = ({route, navigation}) => {
         activeOpacity={0.7}
         onPress={() => {
           handleNavigate('AZURE');
+          // handleNavigate('Configuration GPS', {path: 'AZURE'});
         }}>
         <View
           style={{

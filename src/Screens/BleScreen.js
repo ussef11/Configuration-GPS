@@ -13,6 +13,7 @@ import {
   Dimensions,
   ScrollView,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 import {encode} from 'base-64';
@@ -20,6 +21,7 @@ import {ConfContext} from '../Helper/ConfContext';
 import {atob} from 'react-native-quick-base64';
 import MyHeader from '../component/Header';
 import FastImage from 'react-native-fast-image';
+import {useFocusEffect} from '@react-navigation/native';
 
 const BleScreen = ({route, navigation}) => {
   const [data, setData] = useState(null);
@@ -27,12 +29,26 @@ const BleScreen = ({route, navigation}) => {
 
   const [devices, setDevices] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const {QrcodeData, setQrcodeData} = useContext(ConfContext);
   const {ConnectedDevice, setConnectedDevice} = useContext(ConfContext);
 
   useEffect(() => {
     console.log(' QrcodeDataQrcodeData', QrcodeData);
   }, [QrcodeData]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const intervalId = setInterval(() => {
+        console.log('change***');
+        setShowLoader(prevShowLoader => !prevShowLoader);
+      }, 5000);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    }, []),
+  );
 
   const [bleManager] = useState(new BleManager());
   useEffect(() => {
@@ -49,6 +65,11 @@ const BleScreen = ({route, navigation}) => {
 
         switch (bluetoothState) {
           case 'PoweredOff':
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Scan Imei'}],
+            });
+
             console.log('Bluetooth is off');
             Alert.alert(
               'App would like to use Bluetooth.',
@@ -147,7 +168,12 @@ const BleScreen = ({route, navigation}) => {
 
         if (device.name != null) {
           console.log('Found BLE device:', device.name, device.id);
-
+        }
+        if (device.name === QrcodeData) {
+          console.log('Connecting to device...');
+          bleManager.stopDeviceScan();
+          await connectToDevice(device);
+        } else {
           setDevices(prevDevices => {
             if (!prevDevices.some(d => d.id === device.id)) {
               return [...prevDevices, device];
@@ -155,20 +181,15 @@ const BleScreen = ({route, navigation}) => {
             return prevDevices;
           });
         }
-        if (device.name === QrcodeData) {
-          console.log('Connecting to device...');
-          bleManager.stopDeviceScan();
-          await connectToDevice(device);
-        }
       });
     } catch (error) {
-      console.error('Error scanning for BLE devices:', error);
+      console.error('******************Error scanning for BLE devices:', error);
     }
   };
 
-  useEffect(() => {
-    console.log(devices);
-  }, [devices]);
+  // useEffect(() => {
+  //   console.log(devices);
+  // }, [devices]);
 
   const connectToDevice = async device => {
     try {
@@ -183,7 +204,7 @@ const BleScreen = ({route, navigation}) => {
 
       const services = await connectedDevice.services();
       for (const service of services) {
-        console.log('Service found:', service.uuid);
+        //console.log('Service found:', service.uuid);
 
         const characteristics = await connectedDevice.characteristicsForService(
           service.uuid,
@@ -241,78 +262,9 @@ const BleScreen = ({route, navigation}) => {
     }
   };
 
-  let monitor = null;
-
-  const RecieveData = async () => {
-    console.log('RecieveDataRecieveDataRecieveDataRecieveData');
-    await bleManager.stopDeviceScan();
-    await disconnectFromAllDevices();
-    const connectedDevice = await ConnectedDevice.connect();
-    console.log('Connected to device:', connectedDevice.name);
-    await connectedDevice.discoverAllServicesAndCharacteristics();
-
-    const services = await connectedDevice.services();
-
-    console.log(
-      'Discovered services:',
-      services.map(service => service.uuid),
-    );
-
-    for (const service of services) {
-      console.log('llllll', service.uuid);
-      const characteristics = await connectedDevice.characteristicsForService(
-        service.uuid,
-      );
-
-      // console.log('service', service);
-      for (const characteristic of characteristics) {
-        console.log(characteristic);
-        monitor = characteristic.monitor((error, update) => {
-          if (error) {
-            console.error(`Characteristic monitor error: ${error}`);
-            return;
-          }
-
-          const decodedData = atob(update.value);
-          //console.log(decodedData);
-          const newData = JSON.parse(decodedData);
-
-          setData(prevData => ({
-            ...prevData,
-            ...newData,
-          }));
-        });
-
-        //setMonitor(monitor);
-      }
-    }
-  };
-
   useEffect(() => {
     console.log(data);
   }, [data]);
-
-  const sendData = async () => {
-    await bleManager.stopDeviceScan();
-    await disconnectFromAllDevices();
-    const connectedDevice = await ConnectedDevice.connect();
-    console.log('Connected to device:', connectedDevice.name);
-    await connectedDevice.discoverAllServicesAndCharacteristics();
-    const services = await connectedDevice.services();
-    for (const service of services) {
-      const characteristics = await connectedDevice.characteristicsForService(
-        service.uuid,
-      );
-      for (const characteristic of characteristics) {
-        let charuuid = characteristic.uuid;
-        if (charuuid === '7ce9fd0d-cf46-4838-b39c-9447f6f80256') {
-          let message = encode('1111111111111111111');
-          characteristic.writeWithResponse(message);
-          return;
-        }
-      }
-    }
-  };
 
   return (
     <SafeAreaView style={{height: '100%'}}>
@@ -338,20 +290,108 @@ const BleScreen = ({route, navigation}) => {
           </Text>
         </View>
       )}
-      {/* <TouchableOpacity
-        onPress={() => {
-          sendData();
-        }}>
-        <Text style={{color: 'black'}}>SendData</Text>
-      </TouchableOpacity> */}
+      {!Done && (
+        <ScrollView>
+          <View
+            style={{flex: 1, alignItems: 'center', marginTop: 50, padding: 10}}>
+            <Text style={styles.mytext}>
+              oops, Your Bluetooth Device Not Found !
+            </Text>
+            <Text
+              style={{
+                color: '#393939',
+                fontSize: 15,
+                fontWeight: '300',
+                textAlign: 'center',
+              }}>
+              Please make sure your Bluetooth device is Not available
+            </Text>
+            <View
+              style={{
+                width: '100%',
+                alignContent: 'center',
+                alignItems: 'center',
+              }}>
+              <FastImage
+                style={{height: 50, width: 50}}
+                source={{uri: 'https://ezgif.com/images/loadcat.gif'}}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+              <View style={{borderWidth: 0.4, marginTop: 30, width: '90%'}} />
+            </View>
+            {devices && (
+              <View style={{marginTop: 5, marginBottom: 100}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignContent: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      color: '#393939',
+                      fontSize: 15,
+                      fontWeight: '300',
+                      textAlign: 'center',
+                    }}>
+                    Available Device
+                  </Text>
+                  {showLoader && (
+                    <FastImage
+                      style={{height: 20, width: 20}}
+                      source={require('../media/loader.gif')}
+                      resizeMode={FastImage.resizeMode.contain}
+                    />
+                  )}
+                </View>
 
-      {/* <TouchableOpacity
-        onPress={RecieveData}
-        style={{padding: 20, backgroundColor: 'green', borderRadius: 5}}>
-        <Text style={{color: '#fff'}}>Receive Message</Text>
-      </TouchableOpacity> */}
+                {devices.map(device => (
+                  <View>
+                    {device.name && (
+                      <TouchableOpacity
+                        onPress={() => {
+                          connectToDevice(device);
+                        }}
+                        key={device.id}
+                        style={{
+                          backgroundColor: '#fff',
+                          paddingLeft: 5,
+                          paddingRight: 5,
+                          borderRadius: 10,
+                          marginTop: 10,
+
+                          alignItems: 'center',
+                        }}>
+                        <Text
+                          style={{
+                            height: 30,
+                            marginBottom: 10,
+                            color: 'black',
+                            textAlignVertical: 'center',
+                          }}>
+                          {device.name || 'Unnamed Device'}: {device.id}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
 
+const styles = StyleSheet.create({
+  mytext: {
+    color: '#393939',
+    fontSize: 20,
+    fontWeight: '500',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+});
 export default BleScreen;

@@ -16,6 +16,8 @@ import WifiConf from '../Screens/WifiConf';
 import TestTrams from '../Screens/TestTrams';
 import Services from '../Screens/Services/Services';
 import Aws from '../Screens/Services/Aws';
+import ConfigGps from '../Screens/ConfigGPS/ConfigGps';
+import SimConf from '../Screens/SimConf';
 const HomeScreen = ({route, navigation}) => {
   useEffect(() => {
     console.log('hrrme');
@@ -104,6 +106,8 @@ const HomeScreens = () => {
       <Stack.Screen name="Verify Comming Data" component={TestTrams} />
       <Stack.Screen name="Choose Services" component={Services} />
       <Stack.Screen name="AWS IOT" component={Aws} />
+      <Stack.Screen name="Configuration GPS" component={ConfigGps} />
+      <Stack.Screen name="SIM Configuration" component={SimConf} />
     </Stack.Navigator>
   );
 };

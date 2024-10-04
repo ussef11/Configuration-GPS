@@ -13,6 +13,7 @@ import {Button} from 'react-native-paper';
 import Icon, {Icons} from '../icons/icons';
 import FastImage from 'react-native-fast-image';
 import {ConfContext} from '../Helper/ConfContext';
+import {useFocusEffect} from '@react-navigation/native';
 
 const ScanImei = ({route, navigation}) => {
   const {QrcodeData, setQrcodeData} = useContext(ConfContext);
@@ -20,6 +21,17 @@ const ScanImei = ({route, navigation}) => {
   const [Qrscanner, setQrscanner] = useState(false);
   const [ButtonScan, setButtonScan] = useState(true);
   const [Done, setDone] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('*************');
+      return () => {
+        setQrscanner(false);
+        setButtonScan(true);
+        setQrcodeData(null);
+      };
+    }, []),
+  );
 
   useEffect(() => {
     if (QrcodeData) {

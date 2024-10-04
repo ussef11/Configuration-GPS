@@ -10,17 +10,11 @@ import {
 import Icon, {Icons} from '../icons/icons';
 
 const ChooseConf = ({route, navigation}) => {
-  const [buttonText, setButtonText] = useState('Click Me!');
-
   const handlePressWifi = () => {
     navigation.navigate('Wifi configuration');
-    // setButtonText('Hello, World!');
-    // setTimeout(() => setButtonText('Click Me!'), 1400);
   };
   const handlePressSim = () => {
-    navigation.navigate('Sim configuration');
-    // setButtonText('Hello, World!');
-    // setTimeout(() => setButtonText('Click Me!'), 1400);
+    navigation.navigate('SIM Configuration');
   };
 
   return (
