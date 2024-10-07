@@ -150,6 +150,40 @@ export const sendStopMonitoring = async (value, _ConnectedDevice) => {
   }
 };
 
+export const sendDataSim = async (
+  pin,
+  apn,
+  username,
+  password,
+  _ConnectedDevice,
+) => {
+  try {
+    const message = JSON.stringify({pin, apn, username, password});
+
+    await bleManager.stopDeviceScan();
+    await disconnectFromAllDevices();
+    const connectedDevice = await _ConnectedDevice.connect();
+    console.log('Connected to device:', connectedDevice.name);
+    await connectedDevice.discoverAllServicesAndCharacteristics();
+    const services = await connectedDevice.services();
+    for (const service of services) {
+      const characteristics = await connectedDevice.characteristicsForService(
+        service.uuid,
+      );
+      for (const characteristic of characteristics) {
+        let charuuid = characteristic.uuid;
+        if (charuuid === 'eb3fb5c6-1c22-4a01-811e-96bcdb282a07') {
+          // let message = encode(_message);
+          await characteristic.writeWithResponse(encode(message));
+          return;
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error in sendData:', error);
+  }
+};
+
 // export const sendportaws = async (ssid, password, _ConnectedDevice) => {
 //   try {
 //     const message = JSON.stringify({ssid, password});

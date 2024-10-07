@@ -65,7 +65,7 @@ const TestTrams = ({route, navigation}) => {
                 setReciveData(decodedData);
                 console.log('-----');
                 const newData = JSON.parse(decodedData);
-               
+
                 setData(prevData => ({
                   ...prevData,
                   ...newData,

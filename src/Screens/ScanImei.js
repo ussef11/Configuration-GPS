@@ -147,7 +147,8 @@ const ScanImei = ({route, navigation}) => {
         <QRCodeScanner
           onRead={e => {
             const qrData = e.data;
-            const imeiMatch = qrData.match(/IMEI:(\d+)/);
+            const imeiMatch = qrData.match(/IMEI:(\d+)/i);
+
 
             if (imeiMatch && imeiMatch[1]) {
               const imei = imeiMatch[1];
